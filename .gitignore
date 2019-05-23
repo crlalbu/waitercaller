@@ -5,4 +5,5 @@ __pycache__
 
 # don't track this files
 dbconfig.py
+config.py
 *.pyc
