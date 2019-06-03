@@ -7,12 +7,17 @@ from flask_login import LoginManager
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from flask_login import current_user
 from mockdbhelper import MockDBHelper as DBHelper
 from passwordhelper import PasswordHelper
 from user import User
+import config
+from bitlyhelper import BitlyHelper
+import datetime
 
 DB = DBHelper()
 PH = PasswordHelper()
+BH = BitlyHelper()
 
 login_manager = LoginManager()
 
@@ -27,7 +32,25 @@ def home():
 @app.route("/account")
 @login_required
 def account():
-    return render_template("account.html")
+    tables = DB.get_tables(current_user.get_id())
+    return render_template("account.html", tables=tables)
+
+@app.route("/account/createtable", methods=["POST"])
+@login_required
+def account_createtable():
+    tablename = request.form.get("tablenumber")
+    tableid = DB.add_table(tablename, current_user.get_id())
+    new_url = BH.shorten_url(config.base_url + "newrequest/" + tableid)
+    
+    DB.update_table(tableid, new_url)
+    return redirect(url_for('account'))
+
+@app.route("/account/deletetable")
+@login_required
+def account_deletetable():
+    tableid = request.args.get("tableid")
+    DB.delete_table(tableid)
+    return redirect(url_for('account'))
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -70,9 +93,25 @@ def register():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    now = datetime.datetime.now()
+    requests = DB.get_requests(current_user.get_id())
+    for req in requests:
+        deltaseconds = (now -req['time']).seconds
+        req['wait_minutes'] = "{}.{}".format((deltaseconds/60),
+        str(deltaseconds % 60).zfill(2))
+    return render_template("dashboard.html", requests=requests)
 
-
+@app.route("/dashboard/resolve")
+@login_required
+def dashboard_resolve():
+    request_id = request.args.get("request_id")
+    DB.delete_request(request_id)
+    return redirect(url_for('dashboard'))
+    
+@app.route("/newrquest/<tid>")
+def new_request(tid):
+    DB.add_request(tid, datetime.datetime.now())
+    return "Your request has been logged and a wauter will be with you shortly"
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

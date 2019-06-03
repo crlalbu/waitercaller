@@ -12,6 +12,32 @@
         <div class="row">
             <div class="col-md-12">
                 <h2>Tables</h2>
+                <table class="table table-scripted">
+                    <tr>
+                        <th>No.</th>
+                        <th>URL</th>
+                        <th>Delete</th>
+                    </tr>
+                    {% for table in tables %}
+                        <form class="form-inline" action="/account/deletetable">
+                                <tr>
+                                    <td>{{table.number}}</td>
+                                    <td>{{table.url}}</td>
+                                    <td><input type="submit" value="Delete"
+                                        class="form-control"></td>
+                                        <input type="text" name="tableid"
+                                        value="{{table._id}}" hidden>
+                                </tr>
+                        </form>
+                        {% endfor %}
+                </table>
+
+                <h2>Add new table</h2>
+                <form class="form-inline" action="/account/createtable" method="POST">
+                    <input type="text" name="tablenumber" placeholder="Table number or name"
+                     class="form-control">
+                     <input type="submit" value="Create" class="btn btn-primary">
+                </form>
 
             </div>
         </div>
