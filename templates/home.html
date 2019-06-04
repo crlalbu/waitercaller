@@ -49,25 +49,30 @@
         <div class="col-md-4">
           <h2>Register now</h2>
              <form class="form-horizontal" action="/register" method="POST">
+              {{ registrationform.csrf_token }}
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="email" name="email" id="email" placeholder="Email address" class="form-control">
+                      {{ registrationform.email (class="form-control",
+                      placeholder="Email Address") }}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+                      {{ registrationform.password(class="form-control",
+                      placeholder="Password")}}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="password" name="password2" id="password2" placeholder="Confirm password" class="form-control">
+                      {{ registrationform.password2(class="form-control",
+                      placeholder="Confirm Password")}}
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="submit" value="Register" class="btn btn-primary btn-block">
+                      {{ registrationform.submit(class="btn btn-primary
+                      btn-block")}}
                     </div>
                 </div>
             </form> <!-- /form -->

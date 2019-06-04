@@ -14,6 +14,7 @@ from user import User
 import config
 from bitlyhelper import BitlyHelper
 import datetime
+from forms import RegistrationForm
 
 DB = DBHelper()
 PH = PasswordHelper()
@@ -27,7 +28,10 @@ login_manager.init_app(app)
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    registrationform = RegistrationForm()
+    return render_template("home.html",
+    registrationform=registrationform)
+    
 
 @app.route("/account")
 @login_required
@@ -101,13 +105,14 @@ def dashboard():
         str(deltaseconds % 60).zfill(2))
     return render_template("dashboard.html", requests=requests)
 
+
 @app.route("/dashboard/resolve")
 @login_required
 def dashboard_resolve():
     request_id = request.args.get("request_id")
     DB.delete_request(request_id)
     return redirect(url_for('dashboard'))
-    
+
 @app.route("/newrquest/<tid>")
 def new_request(tid):
     DB.add_request(tid, datetime.datetime.now())

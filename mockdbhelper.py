@@ -1,7 +1,7 @@
 import datetime
 MOCK_USERS = [{"email":'carlos@gmail.com', "salt":
-                "b\'nNnMO2YQ4FAADUve8VsaSFQREpI=\'", "hashed": 
-                'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413'}]
+                "mbD//+Sve3b9EzWSivb42ka6JjI=", "hashed": 
+                'b02f4e29ca87c5971f7c54cb65c4b4f1f6faecf0c1b47f37db57a754f077565992e7b3ea027a509e6db10612fbe932b6f71b267bcb21595e069cb9d9dc30d761'}]
 
 MOCK_TABLES = [{"_id": "1", "number": "1", "owner": "carlos@gmail.com", "url": "mockurl"}]
 
@@ -49,7 +49,7 @@ class MockDBHelper:
 
     def delete_request(self, request_id):
         for i, request in enumerate(MOCK_REQUESTS):
-            if request.get("_id") == request_id:
+            if request.get("_id") == int(request_id):
                 del MOCK_REQUESTS[i]
                 break
         
