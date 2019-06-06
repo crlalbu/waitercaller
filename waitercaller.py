@@ -29,6 +29,7 @@ login_manager.init_app(app)
 @app.route("/")
 def home():
     registrationform = RegistrationForm()
+    
     return render_template("home.html",
     registrationform=registrationform)
     
@@ -81,19 +82,19 @@ def logout():
 
 @app.route("/register", methods=["POST"])
 def register():
-    email = request.form.get("email")
-    pw1 = request.form.get("password")
-    pw2 = request.form.get("password2")
-    if not pw1 == pw2:
-        return redirect(url_for('home'))
-    if DB.get_user(email):
-        return redirect(url_for('home'))
+    form = RegistrationForm(request.form)
+    if form.validate():
+        if DB.get_user(form.email.data):
+            form.email.errors.append("Email address already registered")
+            return render_template('home.html', registrationform=form)
+        salt = PH.get_salt()
+        pass2 = form.password2.data
+        pass2 = pass2 + str(salt)
+        hashed = PH.get_hash(pass2)
+        DB.add_user(form.email.data, salt, hashed)
+        return redirect(url_for("home"))
+    return render_template("home.html", registrationform=form)
     
-    salt = str(PH.get_salt())
-    hashed = PH.get_hash(pw1 + salt)
-    DB.add_user(email, salt, hashed)
-    return redirect(url_for('home'))
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
