@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-
+{% block bodytag %}
+  <body {% if onloadmessage %} onload="alert"({{onloadmessage}}');"
+  {% endif %}>
+  {% endblock% }
 {% block navbar %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">

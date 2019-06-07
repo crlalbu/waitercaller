@@ -92,7 +92,8 @@ def register():
         pass2 = pass2 + str(salt)
         hashed = PH.get_hash(pass2)
         DB.add_user(form.email.data, salt, hashed)
-        return redirect(url_for("home"))
+        return render_template("home.html", registrationform=form,
+        onloadmessage="Registration sucessfull. Please log in.")
     return render_template("home.html", registrationform=form)
     
 @app.route("/dashboard")
