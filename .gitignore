@@ -1,5 +1,6 @@
 # Don't track content of these folders
 venv/
+env
 .vscode
 __pycache__
 
