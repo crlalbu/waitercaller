@@ -124,10 +124,10 @@ def dashboard():
 @login_required
 def dashboard_resolve():
     request_id = request.args.get("request_id")
-    DB.delete_request(request_id)
+    DB.delete_requests(request_id)
     return redirect(url_for('dashboard'))
 
-@app.route("/newrquest/<tid>")
+@app.route("/newrequest/<tid>")
 def new_request(tid):
     if DB.add_request(tid, datetime.datetime.now()):
         return "Your request has been logged and a wauter will be with you shortly"
